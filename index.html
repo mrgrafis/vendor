@@ -147,12 +147,14 @@
 
             <div class="form-group">
                 <label for="alamatPemasangan">Alamat Pemasangan:</label>
-                <textarea id="alamatPemasangan" name="alamatPemasangan" required readonly placeholder="Akan terisi otomatis berdasarkan nama vendor"></textarea>
+                <input type="text" id="alamatPemasangan" name="alamatPemasangan" list="alamatList" required placeholder="Pilih atau ketik alamat pemasangan">
+                <datalist id="alamatList">
+                    </datalist>
             </div>
 
             <div class="form-group">
                 <label for="ukuranMateri">Ukuran Materi:</label>
-                <input type="text" id="ukuranMateri" name="ukuranMateri" required readonly placeholder="Akan terisi otomatis berdasarkan nama vendor">
+                <input type="text" id="ukuranMateri" name="ukuranMateri" required readonly placeholder="Akan terisi otomatis">
             </div>
 
             <div class="form-group">
@@ -176,10 +178,10 @@
     </div>
 
     <script>
-        // --- DATABASE VENDOR BARU ---
+        // --- DATABASE VENDOR (Ini adalah database LENGKAP Anda) ---
         // Format nomor telepon: Kode negara + Nomor (tanpa spasi atau karakter lain, tanpa 0 di awal)
         // Contoh: 6281234567890 untuk nomor Indonesia
-        const vendorData = [
+        const rawVendorData = [
             {"namaVendor": "LINTAS MEDIATAMA", "alamatPemasangan": "BALIHO Jl. Astana Anyar - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "628221686954"},
             {"namaVendor": "SUMBER SARANA PROMO", "alamatPemasangan": "BALIHO Jl. Gatot Subroto-Burangrang (Depan Bank Niaga) - 6 m x 4 m FL", "ukuranMateri": "Baliho 6x4 m FL", "noTelp": "6281220470979"},
             {"namaVendor": "MITRA PROMO SEDAYA", "alamatPemasangan": "BALIHO Jl. Otto Iskandardinata (Depan Terminal Tegallega) - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "62811234570"},
@@ -252,10 +254,14 @@
         const namaVendorInput = document.getElementById('namaVendor');
         const vendorList = document.getElementById('vendorList');
         const alamatPemasanganInput = document.getElementById('alamatPemasangan');
+        const alamatList = document.getElementById('alamatList'); // Datalist baru untuk alamat
         const ukuranMateriInput = document.getElementById('ukuranMateri');
         const noTelpVendorInput = document.getElementById('noTelpVendor');
         const eventForm = document.getElementById('eventForm');
         const responseMessageDiv = document.getElementById('responseMessage');
+
+        // Variabel global untuk menyimpan alamat yang difilter saat nama vendor dipilih
+        let filteredAddressesForVendor = [];
 
         // Fungsi untuk menampilkan pesan respon
         function displayMessage(message, type) {
@@ -267,34 +273,78 @@
             }, 7000); // Pesan akan hilang setelah 7 detik
         }
 
-        // Fungsi untuk mengisi datalist dengan nama vendor yang tersedia
+        // Fungsi untuk mengisi datalist Nama Vendor (unik)
         function populateVendorDatalist() {
             vendorList.innerHTML = ''; // Bersihkan opsi lama
-            vendorData.forEach(vendor => {
+            const uniqueVendors = [...new Set(rawVendorData.map(item => item.namaVendor))]; // Dapatkan nama vendor unik
+            uniqueVendors.forEach(vendorName => {
                 const option = document.createElement('option');
-                option.value = vendor.namaVendor;
+                option.value = vendorName;
                 vendorList.appendChild(option);
             });
         }
         populateVendorDatalist(); // Panggil saat halaman dimuat
 
+        // Fungsi untuk mengisi datalist Alamat Pemasangan berdasarkan Nama Vendor yang dipilih
+        function populateAlamatDatalist(selectedVendorName) {
+            alamatList.innerHTML = ''; // Bersihkan opsi lama
+            // Filter data untuk mendapatkan entri hanya dari vendor yang dipilih
+            filteredAddressesForVendor = rawVendorData.filter(item => 
+                item.namaVendor.trim().toLowerCase() === selectedVendorName.toLowerCase()
+            );
+            
+            // Dapatkan alamat unik dari vendor yang sudah difilter
+            const uniqueAddresses = [...new Set(filteredAddressesForVendor.map(item => item.alamatPemasangan))];
+            
+            uniqueAddresses.forEach(address => {
+                const option = document.createElement('option');
+                option.value = address;
+                alamatList.appendChild(option);
+            });
+            alamatPemasanganInput.value = ''; // Kosongkan alamat saat vendor berubah
+            ukuranMateriInput.value = ''; // Kosongkan ukuran materi juga
+            noTelpVendorInput.value = ''; // Kosongkan no telp juga
+        }
+
         // Event listener ketika nilai input namaVendor berubah
         namaVendorInput.addEventListener('change', function() {
             const selectedVendorName = this.value.trim();
-            const foundVendor = vendorData.find(vendor => vendor.namaVendor.trim().toLowerCase() === selectedVendorName.toLowerCase());
+            const foundEntries = rawVendorData.filter(vendor => vendor.namaVendor.trim().toLowerCase() === selectedVendorName.toLowerCase());
 
-            if (foundVendor) {
-                alamatPemasanganInput.value = foundVendor.alamatPemasangan;
-                ukuranMateriInput.value = foundVendor.ukuranMateri;
-                noTelpVendorInput.value = foundVendor.noTelp;
-                displayMessage('Data vendor ditemukan.', 'info');
+            if (foundEntries.length > 0) {
+                displayMessage('Data vendor ditemukan. Silakan pilih Alamat Pemasangan.', 'info');
+                populateAlamatDatalist(selectedVendorName); // Isi datalist alamat
             } else {
+                displayMessage('Nama Vendor tidak ditemukan. Pilih dari daftar atau periksa ejaan.', 'error');
+                alamatList.innerHTML = ''; // Kosongkan datalist alamat
                 alamatPemasanganInput.value = '';
                 ukuranMateriInput.value = '';
                 noTelpVendorInput.value = '';
-                displayMessage('Nama Vendor tidak ditemukan. Pilih dari daftar atau periksa ejaan.', 'error');
             }
         });
+
+        // Event listener ketika nilai input alamatPemasangan berubah
+        alamatPemasanganInput.addEventListener('change', function() {
+            const selectedAddress = this.value.trim();
+            const selectedVendorName = namaVendorInput.value.trim();
+
+            // Cari entri spesifik yang cocok dengan vendor dan alamat
+            const foundEntry = rawVendorData.find(item => 
+                item.namaVendor.trim().toLowerCase() === selectedVendorName.toLowerCase() &&
+                item.alamatPemasangan.trim().toLowerCase() === selectedAddress.toLowerCase()
+            );
+
+            if (foundEntry) {
+                ukuranMateriInput.value = foundEntry.ukuranMateri;
+                noTelpVendorInput.value = foundEntry.noTelp;
+                displayMessage('Detail pemasangan terisi otomatis.', 'success');
+            } else {
+                ukuranMateriInput.value = '';
+                noTelpVendorInput.value = '';
+                displayMessage('Alamat pemasangan tidak valid untuk vendor ini. Pilih dari daftar atau periksa ejaan.', 'error');
+            }
+        });
+
 
         // Event listener untuk submit formulir
         eventForm.addEventListener('submit', function(event) {
@@ -324,7 +374,7 @@
             // 2. Validasi Nomor Telepon Vendor
             const nomorWaTujuan = noTelpVendorInput.value.trim();
             if (!nomorWaTujuan) {
-                displayMessage('Nomor telepon vendor tidak ditemukan. Mohon pilih vendor yang valid.', 'error');
+                displayMessage('Nomor telepon vendor tidak ditemukan. Mohon pilih Nama Vendor dan Alamat Pemasangan yang valid dari daftar.', 'error');
                 return;
             }
             // Validasi format nomor telepon sederhana (hanya angka)
@@ -332,7 +382,6 @@
                 displayMessage('Format nomor telepon tidak valid (hanya angka).', 'error');
                 return;
             }
-
 
             // 3. Ambil Data Formulir untuk Pesan WhatsApp
             const namaMateriEvent = document.getElementById('namaMateriEvent').value.trim();
@@ -367,7 +416,8 @@
                 alamatPemasanganInput.value = '';
                 ukuranMateriInput.value = '';
                 noTelpVendorInput.value = '';
-                populateVendorDatalist(); // Isi ulang datalist jika perlu
+                populateVendorDatalist(); // Isi ulang datalist nama vendor
+                alamatList.innerHTML = ''; // Kosongkan datalist alamat
             } catch (error) {
                 console.error("Gagal membuka link WhatsApp:", error);
                 displayMessage('Gagal membuka link WhatsApp. Pastikan Anda mengizinkan pop-up dan WhatsApp terinstal.', 'error');
