@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulir Entry Data Event & Kirim WA</title>
+    <title>Formulir Entry Data Event</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
@@ -64,11 +64,6 @@
             outline: none;
             background-color: #fff;
         }
-        /* input[type="file"] { Ini dihapus karena tidak ada fitur upload foto lagi */
-        /* width: 100%; */
-        /* padding: 10px 0; */
-        /* cursor: pointer; */
-        /* } */
         textarea {
             resize: vertical;
             min-height: 100px;
@@ -121,7 +116,7 @@
             color: #0c5460;
             border: 1px solid #bee5eb;
         }
-        small { /* Ini juga bisa dihapus jika tidak ada input type="file" sama sekali */
+        small {
             color: #6c757d;
             font-size: 0.88em;
             margin-top: 5px;
@@ -132,7 +127,7 @@
 <body>
     <div class="container">
         <h2>Formulir Entry Data Event</h2>
-        <form id="eventForm" action="proses_wa.php" method="post">
+        <form id="eventForm">
             <div class="form-group">
                 <label for="namaMateriEvent">Nama Materi Event:</label>
                 <input type="text" id="namaMateriEvent" name="namaMateriEvent" required placeholder="Contoh: Pemasangan Billboard Promo">
@@ -175,34 +170,82 @@
                 <input type="date" id="tglTurun" name="tglTurun" required>
             </div>
 
-            <button type="submit">Submit Data & Kirim WA</button>
+            <button type="submit">Kirim Notifikasi ke WA Vendor</button>
         </form>
         <div id="responseMessage" class="message"></div>
     </div>
 
     <script>
-        // Data Vendor (Dalam aplikasi nyata, ini SANGAT DIREKOMENDASIKAN diambil dari API/Database di backend)
-        // Untuk contoh ini, kita simpan statis di frontend
+        // --- DATABASE VENDOR BARU ---
+        // Format nomor telepon: Kode negara + Nomor (tanpa spasi atau karakter lain, tanpa 0 di awal)
+        // Contoh: 6281234567890 untuk nomor Indonesia
         const vendorData = [
-            {
-                "namaVendor": "LINTAS MEDIATAMA",
-                "alamatPemasangan": "BALIHO Jl. Astana Anyar - 6 m x 4 m BL",
-                "ukuranMateri": "Baliho 6x4 m BL",
-                "noTelp": "6282128024866" // Contoh nomor WhatsApp yang valid (tanpa +62, 0 di depan, atau spasi)
-            },
-            {
-                "namaVendor": "MITRA PROMO SEDAYA",
-                "alamatPemasangan": "BALIHO Jl. Cikawao - 6 m x 4 m FL",
-                "ukuranMateri": "Baliho 6x4 m FL",
-                "noTelp": "6285156427136" // Ganti dengan nomor yang valid
-            },
-            {
-                "namaVendor": "SUMBER SARANA PROMO",
-                "alamatPemasangan": "BALIHO Jl. Gatot Subroto-Burangrang (Depan Bank Niaga) - 6 m x 4 m FL",
-                "ukuranMateri": "Baliho 6x4 m FL",
-                "noTelp": "6285142156602" // Ganti dengan nomor yang valid
-            }
-            // Tambahkan data vendor lainnya di sini
+            {"namaVendor": "LINTAS MEDIATAMA", "alamatPemasangan": "BALIHO Jl. Astana Anyar - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "628221686954"},
+            {"namaVendor": "SUMBER SARANA PROMO", "alamatPemasangan": "BALIHO Jl. Gatot Subroto-Burangrang (Depan Bank Niaga) - 6 m x 4 m FL", "ukuranMateri": "Baliho 6x4 m FL", "noTelp": "6281220470979"},
+            {"namaVendor": "MITRA PROMO SEDAYA", "alamatPemasangan": "BALIHO Jl. Otto Iskandardinata (Depan Terminal Tegallega) - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "62811234570"},
+            {"namaVendor": "MITRA PROMO SEDAYA", "alamatPemasangan": "BALIHO Jl. Sumbawa - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "62811234570"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Tamblong Depan Troy Cafe - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "62812235934648"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Burangrang (depan kantor Kecamatan) - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "62812235934648"},
+            {"namaVendor": "BUNGA MEGA LESTARI", "alamatPemasangan": "BALIHO Jl. Buah Batu (Grand Pasang) - Pasar Kosambi - 10 m x 5 m FL", "ukuranMateri": "Baliho 10x5 m FL", "noTelp": "628121506666"},
+            {"namaVendor": "SUMBER SARANA PROMO", "alamatPemasangan": "BILLBOARD Jl. Kopo - Jl. Pasirkoja - 5 m x 10 m FL", "ukuranMateri": "Billboard 5x10 FL", "noTelp": "6281220470979"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "LED Jl. Braga - 3 m x 4 m FL", "ukuranMateri": "LED 3x4 FL", "noTelp": "62812235934648"},
+            {"namaVendor": "MULTI ADHI PERKASA", "alamatPemasangan": "BALIHO Jl. Cigagak - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "6285101736600"},
+            {"namaVendor": "GA PROMOSINDO", "alamatPemasangan": "MIDIS Jl. Moh. Toha (Dekat Lampu Merah Simpang BKR) - 2 m x 4 m BL", "ukuranMateri": "MIDIS 2x4 BL", "noTelp": "6281320389035"},
+            {"namaVendor": "BOMA CIPTA CITRA", "alamatPemasangan": "PJU Jl. Ahmad Yani - 2 m x 4 m BL (5 Titik)", "ukuranMateri": "PJU 2x4 BL", "noTelp": "628122056886"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "PJU Jl. Buah Batu - 2 m x 4 m BL", "ukuranMateri": "PJU 2x4 BL", "noTelp": "62812235934648"},
+            {"namaVendor": "TOTAL ARGA MANDIRI", "alamatPemasangan": "PJU Jl. Talaga Bodas - 2 m x 1 m BL (7 Titik)", "ukuranMateri": "PJU 2x1 BL", "noTelp": "6287824611345"},
+            {"namaVendor": "MULTI ADHI PERKASA", "alamatPemasangan": "BALIHO Jl. Buah Batu Kopi - Cieurium - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "6285101736600"},
+            {"namaVendor": "ALUMNI KARYA PRATAMA", "alamatPemasangan": "BALIHO Jl. Raya Timur (Depan Pasar Gedebage) - 6 m x 4 m FL", "ukuranMateri": "Baliho 6x4 m FL", "noTelp": "628122751788"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Raya Cijerah (depan pasar Cijerah) - 6 m x 4 m FL", "ukuranMateri": "Baliho 6x4 m FL", "noTelp": "62812235934648"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Sindangpalay (Cigondewah) - 6 m x 4 m FL", "ukuranMateri": "Baliho 6x4 m FL", "noTelp": "62812235934648"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Sekelimus (Pertigaan Jl. Jambol) - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "62812235934648"},
+            {"namaVendor": "MITRA PROMO SEDAYA", "alamatPemasangan": "BILLBOARD Jl. Jambol (Pintu Masuk) - 8 m x 4 m FL", "ukuranMateri": "BILLBOARD 8x4 FL", "noTelp": "62811234570"},
+            {"namaVendor": "BOMA CIPTA CITRA", "alamatPemasangan": "BILLBOARD Jl. PasirKaliki (Paskal 23 Mall) - 5 m x 10 m BL", "ukuranMateri": "BILLBOARD 5x10 BL", "noTelp": "628122056886"},
+            {"namaVendor": "BOMA CIPTA CITRA", "alamatPemasangan": "BILLBOARD Jl. Naripan no 104 (Jl. Pamol Pool Bus Amrbi) - 10 m x 5 m FL", "ukuranMateri": "BILLBOARD 10x5 m FL", "noTelp": "628122056886"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Bali (Paskal 23) - 6 m x 4 m FL", "ukuranMateri": "Baliho 6x4 m FL", "noTelp": "62812235934648"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Margacinta (Dekat Borma) - 6 m x 4 m FL", "ukuranMateri": "Baliho 6x4 m FL", "noTelp": "62812235934648"},
+            {"namaVendor": "ALUMNI KARYA PRATAMA", "alamatPemasangan": "BALIHO Jl. Moch Toha (Dekat Master Clean Carwash) - 6 m x 4 m FL", "ukuranMateri": "Baliho 6x4 m FL", "noTelp": "628122751788"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Terusan Jakarta (Afterlight) - 6 m x 4 m FL", "ukuranMateri": "Baliho 6x4 m FL", "noTelp": "62812235934648"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Cikutra Barat (dekat Borma) - 6 m x 4 m FL", "ukuranMateri": "Baliho 6x4 m FL", "noTelp": "62812235934648"},
+            {"namaVendor": "ALUMNI KARYA PRATAMA", "alamatPemasangan": "BALIHO Jl. Dipatiukur - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "6287700578480"},
+            {"namaVendor": "MITRA PROMO SEDAYA", "alamatPemasangan": "BALIHO Jl. Dipatiukur - Diponegoro - 8 m x 4 m FL", "ukuranMateri": "Baliho 8x4 FL", "noTelp": "62811234570"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Sumber Bandung - 6 m x 4 m FL", "ukuranMateri": "Baliho 6x4 m FL", "noTelp": "62812235934648"},
+            {"namaVendor": "ARIAL TRI AD", "alamatPemasangan": "BALIHO Jl. Trunojoyo Depan Total Buah - 6 m x 4 m FL", "ukuranMateri": "Baliho 6x4 m FL", "noTelp": "628122722365"},
+            {"namaVendor": "SUMBER SARANA PROMO", "alamatPemasangan": "BILLBOARD Jl. Surapati (Depan Pertamina) - 5 m x 10 m FL", "ukuranMateri": "BILLBOARD 5x10 FL", "noTelp": "6281220470979"},
+            {"namaVendor": "MULTI ADHI PERKASA", "alamatPemasangan": "BALIHO Jl. Ahmad Yani (Depan Borma) - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "6285101736600"},
+            {"namaVendor": "LINTAS MEDIATAMA", "alamatPemasangan": "LED Jl. Ir. H. Djuanda (BCA) - 4 m x 8 m BL", "ukuranMateri": "LED 4x8 BL", "noTelp": "6282216869954"},
+            {"namaVendor": "LINTAS MEDIATAMA", "alamatPemasangan": "MIDIS Jl. Hariangbanga (Depan No. 1) - 2 m x 4 m BL", "ukuranMateri": "MIDIS 2x4 BL", "noTelp": "6282216869954"},
+            {"namaVendor": "TOTAL ARGA MANDIRI", "alamatPemasangan": "MIDIS Jl. Ir. H. Djuanda - Pasar Simpang Dago - 2 m x 4 m BL", "ukuranMateri": "MIDIS 2x4 BL", "noTelp": "6287824611345"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "PJU Jl. Cihampelas bawah - 3 m x 2 m BL (4 Titik)", "ukuranMateri": "PJU 3x2 BL", "noTelp": "62812235934648"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "PJU Jl. LLRE Martadinata (Pertigaan Macan) - 2 m x 1 m BL (5 Titik)", "ukuranMateri": "PJU 2x1 BL", "noTelp": "62812235934648"},
+            {"namaVendor": "MULTI ADHI PERKASA", "alamatPemasangan": "BALIHO Jl. Pajajaran - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "6285101736600"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Dipati Pepti Kemas Gedebage - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "62812235934648"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Darwati (Sapan) - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "62812235934648"},
+            {"namaVendor": "MULTI ADHI PERKASA", "alamatPemasangan": "BALIHO Jl. Depan PMI - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "6285101736600"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Jakarta (Dekat GOR Koni) - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "62812235934648"},
+            {"namaVendor": "MEDIA KREASI CIPTA INDONESIA", "alamatPemasangan": "BILLBOARD Jl. Gatot Subroto (Depan TSM) - 10 m x 5 m BL", "ukuranMateri": "BILLBOARD 10x5 BL", "noTelp": "6285713340466"},
+            {"namaVendor": "MULTI ADHI PERKASA", "alamatPemasangan": "BILLBOARD Jl. Kiaracondong - 10 m x 5 m BL", "ukuranMateri": "BILLBOARD 10x5 BL", "noTelp": "6285101736600"},
+            {"namaVendor": "SUMBER SARANA PROMO", "alamatPemasangan": "BILLBOARD Jl. Soekarno Hatta - Cibiru - 8 m x 4 m FL", "ukuranMateri": "BILLBOARD 8x4 FL", "noTelp": "6281220470979"},
+            {"namaVendor": "MITRA PROMO SEDAYA", "alamatPemasangan": "BILLBOARD Terminal Cicaheum - 8 m x 4 m FL", "ukuranMateri": "BILLBOARD 8x4 FL", "noTelp": "62811234570"},
+            {"namaVendor": "BUNGALO KREASINDO", "alamatPemasangan": "BALIHO Jl. Kopo (Dekat tol Kopo) - 6 m x 4 m FL", "ukuranMateri": "Baliho 6x4 FL", "noTelp": "6282121021711"},
+            {"namaVendor": "MEDIA KREASI PROMO", "alamatPemasangan": "BALIHO Jl. Kopo Sabilulungan Pemkab Bandung - 5 m x 4 m FL", "ukuranMateri": "Baliho 5x4 FL", "noTelp": "6281224158979"},
+            {"namaVendor": "MULTI ADHI PERKASA", "alamatPemasangan": "BALIHO Jl. Leuwipanjang - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "6285101736600"},
+            {"namaVendor": "MULTI ADHI PERKASA", "alamatPemasangan": "BALIHO Jl. Raya Cibabat Yut - 6 m x 4 m FL", "ukuranMateri": "Baliho 6x4 m FL", "noTelp": "6285101736600"},
+            {"namaVendor": "ALUMNI KARYA PRATAMA", "alamatPemasangan": "BALIHO Jl. Cimahi Cibeureum (Dekat Toko 37) - 6 m x 4 m FL", "ukuranMateri": "Baliho 6x4 m FL", "noTelp": "628122751788"},
+            {"namaVendor": "TOTAL ARGA MANDIRI", "alamatPemasangan": "BALIHO Jl. Gatot Subroto - 6 m x 4 m FL", "ukuranMateri": "Baliho 6x4 m FL", "noTelp": "6287824611345"},
+            {"namaVendor": "LINTAS MEDIATAMA", "alamatPemasangan": "BALIHO Jl. Gerlong (Peritigaan NHI) - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "6282216869954"},
+            {"namaVendor": "LINTAS MEDIATAMA", "alamatPemasangan": "BALIHO Jl. Surya Sumantri (Marana) - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "6282216869954"},
+            {"namaVendor": "LINTAS MEDIATAMA", "alamatPemasangan": "BALIHO Jl. Ciateul Cigereleng - 10 m x 5 m BL", "ukuranMateri": "Baliho 10x5 m BL", "noTelp": "6282216869954"},
+            {"namaVendor": "MEDIA SIGN", "alamatPemasangan": "BILLBOARD Jl. Sukajadi 106 - 10 m x 6 m FL", "ukuranMateri": "BILLBOARD 10x6 FL", "noTelp": "6281230308721"},
+            {"namaVendor": "MEDIA SIGN", "alamatPemasangan": "BILLBOARD Jl. Leuwipanjang Terminal Leuwipanjang - 10 m x 5 m FL", "ukuranMateri": "BILLBOARD 10x5 FL", "noTelp": "6281230308721"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "PJU Jl. Supratman - 2 m x 3 m BL (4 Titik)", "ukuranMateri": "PJU 2x3 BL", "noTelp": "62812235934648"},
+            {"namaVendor": "SUMBER SARANA PROMO", "alamatPemasangan": "PJU Jl. Setiabudi - 2 m x 3 m BL (4 Titik)", "ukuranMateri": "PJU 2x3 BL", "noTelp": "6281220470979"},
+            {"namaVendor": "ARIAL TRI AD", "alamatPemasangan": "PJU Jl. Surya Sumantri - 2 m x 3 m BL (4 Titik)", "ukuranMateri": "PJU 2x3 BL", "noTelp": "628122722365"},
+            {"namaVendor": "SUMBER SARANA PROMO", "alamatPemasangan": "BALIHO Jl. Otista - Pasirkaliki (Dekat Bank BTN) - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "6281220470979"},
+            {"namaVendor": "MITRA PROMO SEDAYA", "alamatPemasangan": "BALIHO Pasar Ujung Berung - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "62811234570"},
+            {"namaVendor": "MULTI ADHI PERKASA", "alamatPemasangan": "LED Jl. Soekarno Hatta (Progressive) - 6 m x 4 m FL", "ukuranMateri": "LED 6x4 FL", "noTelp": "6285101736600"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Buah Batu Raya - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "62812235934648"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "PJU Lapangan Supratman - 2 m x 1 m BL (3 Titik)", "ukuranMateri": "PJU 2x1 BL", "noTelp": "62812235934648"}
         ];
 
         // Mendapatkan referensi elemen DOM
@@ -237,15 +280,15 @@
 
         // Event listener ketika nilai input namaVendor berubah
         namaVendorInput.addEventListener('change', function() {
-            const selectedVendorName = this.value.trim(); // Gunakan .trim() untuk membersihkan spasi
-            const foundVendor = vendorData.find(vendor => vendor.namaVendor.trim().toLowerCase() === selectedVendorName.toLowerCase()); // Case-insensitive comparison
+            const selectedVendorName = this.value.trim();
+            const foundVendor = vendorData.find(vendor => vendor.namaVendor.trim().toLowerCase() === selectedVendorName.toLowerCase());
 
             if (foundVendor) {
                 alamatPemasanganInput.value = foundVendor.alamatPemasangan;
                 ukuranMateriInput.value = foundVendor.ukuranMateri;
-                noTelpVendorInput.value = foundVendor.noTelp; // Simpan nomor telepon di input tersembunyi
+                noTelpVendorInput.value = foundVendor.noTelp;
+                displayMessage('Data vendor ditemukan.', 'info');
             } else {
-                // Bersihkan bidang jika nama vendor tidak ditemukan atau tidak cocok persis
                 alamatPemasanganInput.value = '';
                 ukuranMateriInput.value = '';
                 noTelpVendorInput.value = '';
@@ -253,11 +296,11 @@
             }
         });
 
-        // Event listener untuk submit formulir menggunakan Fetch API
-        eventForm.addEventListener('submit', async function(event) {
+        // Event listener untuk submit formulir
+        eventForm.addEventListener('submit', function(event) {
             event.preventDefault(); // Mencegah reload halaman
 
-            // Validasi di sisi klien sebelum mengirim
+            // 1. Validasi Input
             const requiredFields = [
                 { id: 'namaMateriEvent', name: 'Nama Materi Event' },
                 { id: 'brand', name: 'Brand' },
@@ -274,65 +317,60 @@
                 if (!inputElement.value.trim()) {
                     displayMessage(`${field.name} tidak boleh kosong.`, 'error');
                     inputElement.focus();
-                    return;
+                    return; // Hentikan proses jika ada field kosong
                 }
             }
-            
-            // Validasi Nomor Telepon Vendor
-            if (!noTelpVendorInput.value.trim()) {
-                displayMessage('Nomor telepon vendor tidak ditemukan. Mohon pilih vendor yang valid dari daftar.', 'error');
+
+            // 2. Validasi Nomor Telepon Vendor
+            const nomorWaTujuan = noTelpVendorInput.value.trim();
+            if (!nomorWaTujuan) {
+                displayMessage('Nomor telepon vendor tidak ditemukan. Mohon pilih vendor yang valid.', 'error');
+                return;
+            }
+            // Validasi format nomor telepon sederhana (hanya angka)
+            if (!/^\d+$/.test(nomorWaTujuan)) {
+                displayMessage('Format nomor telepon tidak valid (hanya angka).', 'error');
                 return;
             }
 
-            // Karena tidak ada upload foto, kita tidak perlu FormData untuk file.
-            // Kita bisa pakai URLSearchParams atau objek biasa.
-            const formData = new URLSearchParams();
-            formData.append('namaMateriEvent', document.getElementById('namaMateriEvent').value.trim());
-            formData.append('brand', document.getElementById('brand').value.trim());
-            formData.append('namaVendor', document.getElementById('namaVendor').value.trim());
-            formData.append('alamatPemasangan', document.getElementById('alamatPemasangan').value.trim());
-            formData.append('ukuranMateri', document.getElementById('ukuranMateri').value.trim());
-            formData.append('timpaVisual', document.getElementById('timpaVisual').value.trim());
-            formData.append('tglPasang', document.getElementById('tglPasang').value.trim());
-            formData.append('tglTurun', document.getElementById('tglTurun').value.trim());
-            formData.append('noTelpVendor', document.getElementById('noTelpVendor').value.trim());
 
+            // 3. Ambil Data Formulir untuk Pesan WhatsApp
+            const namaMateriEvent = document.getElementById('namaMateriEvent').value.trim();
+            const brand = document.getElementById('brand').value.trim();
+            const namaVendor = document.getElementById('namaVendor').value.trim();
+            const alamatPemasangan = document.getElementById('alamatPemasangan').value.trim();
+            const ukuranMateri = document.getElementById('ukuranMateri').value.trim();
+            const timpaVisual = document.getElementById('timpaVisual').value.trim();
+            const tglPasang = document.getElementById('tglPasang').value.trim();
+            const tglTurun = document.getElementById('tglTurun').value.trim();
 
+            // 4. Format Pesan WhatsApp
+            const pesanWa =
+                `*NOTIFIKASI PEMASANGAN MATERI EVENT*\n\n` +
+                `*Nama Materi Event:* ${namaMateriEvent}\n` +
+                `*Brand:* ${brand}\n` +
+                `*Nama Vendor:* ${namaVendor}\n` +
+                `*Alamat Pemasangan:* ${alamatPemasangan}\n` +
+                `*Ukuran Materi:* ${ukuranMateri}\n` +
+                `*Timpa Visual:* ${timpaVisual}\n` +
+                `*Tanggal Pasang:* ${tglPasang}\n` +
+                `*Tanggal Turun:* ${tglTurun}\n\n` +
+                `Mohon segera ditindaklanjuti. Terima kasih!`;
+
+            // 5. Buka Link WhatsApp di Tab/Jendela Baru
             try {
-                displayMessage('Mengirim data... Mohon tunggu.', 'info');
-                
-                const response = await fetch('proses_wa.php', {
-                    method: 'POST',
-                    body: formData, // Menggunakan URLSearchParams
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded' // Penting untuk URLSearchParams
-                    }
-                });
-
-                // Periksa jika respons HTTP bukan 2xx (misal 500 Internal Server Error)
-                if (!response.ok) {
-                    const errorText = await response.text(); // Coba ambil teks error dari respon
-                    console.error('HTTP Error Response:', errorText);
-                    throw new Error(`Server error: ${response.status} - ${response.statusText}. Cek log server untuk detail.`);
-                }
-
-                const result = await response.json(); // Menguraikan respon JSON dari server
-
-                if (result.status === 'success') {
-                    displayMessage('Sukses: ' + result.message, 'success');
-                    eventForm.reset(); // Mengatur ulang formulir setelah sukses
-                    // Bersihkan input readonly juga
-                    alamatPemasanganInput.value = '';
-                    ukuranMateriInput.value = '';
-                    noTelpVendorInput.value = '';
-                    populateVendorDatalist(); // Isi ulang datalist jika perlu
-                } else {
-                    displayMessage('Error: ' + result.message + ' (Lihat konsol browser untuk info lebih lanjut)', 'error');
-                    console.error('Debug Info dari Server:', result.debug_info);
-                }
+                // encodeURIComponent memastikan semua karakter di pesan terenkode dengan benar untuk URL
+                window.open(`https://wa.me/${nomorWaTujuan}?text=${encodeURIComponent(pesanWa)}`, '_blank');
+                displayMessage('Link WhatsApp telah dibuka. Mohon konfirmasi pengiriman pesan di aplikasi WhatsApp.', 'success');
+                eventForm.reset(); // Mengatur ulang formulir setelah berhasil membuka link
+                // Bersihkan input readonly juga
+                alamatPemasanganInput.value = '';
+                ukuranMateriInput.value = '';
+                noTelpVendorInput.value = '';
+                populateVendorDatalist(); // Isi ulang datalist jika perlu
             } catch (error) {
-                console.error('Terjadi kesalahan pada fetch request:', error);
-                displayMessage('Terjadi kesalahan saat mengirim data. Silakan coba lagi. Detail: ' + error.message, 'error');
+                console.error("Gagal membuka link WhatsApp:", error);
+                displayMessage('Gagal membuka link WhatsApp. Pastikan Anda mengizinkan pop-up dan WhatsApp terinstal.', 'error');
             }
         });
     </script>
