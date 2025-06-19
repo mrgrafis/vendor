@@ -4,123 +4,195 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulir Entry Data Event</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* CSS Variables for easier theme management */
+        :root {
+            --primary-color: #4CAF50; /* Green */
+            --secondary-color: #f8f9fa; /* Light Gray */
+            --text-color: #343a40; /* Dark Gray */
+            --border-color: #ced4da; /* Gray Border */
+            --focus-border-color: #80bdff; /* Blue for focus */
+            --box-shadow-color: rgba(0, 0, 0, 0.08);
+            --success-bg: #d4edda;
+            --success-text: #155724;
+            --error-bg: #f8d7da;
+            --error-text: #721c24;
+            --info-bg: #d1ecf1;
+            --info-text: #0c5460;
+        }
+
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f0f2f5;
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--secondary-color);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            color: #333;
+            color: var(--text-color);
+            line-height: 1.6;
         }
+
         .container {
-            background-color: #ffffff;
-            padding: 35px 45px;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            background-color: var(--light-color);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px var(--box-shadow-color);
             width: 100%;
-            max-width: 600px;
+            max-width: 650px; /* Slightly wider */
             box-sizing: border-box;
-            border: 1px solid #e0e0e0;
+            border: 1px solid #e9ecef;
+            animation: fadeIn 0.8s ease-out;
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         h2 {
             text-align: center;
-            color: #007bff;
+            color: var(--primary-color);
             margin-bottom: 35px;
-            font-weight: 600;
-            font-size: 2.2em;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+            font-weight: 700;
+            font-size: 2.5em; /* Larger heading */
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+            letter-spacing: 0.5px;
         }
+
         .form-group {
             margin-bottom: 25px;
         }
+
         label {
             display: block;
             margin-bottom: 10px;
-            color: #555;
+            color: var(--text-color);
             font-weight: 600;
             font-size: 1.05em;
         }
+
         input[type="text"],
         input[type="date"],
         textarea {
             width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ced4da;
-            border-radius: 8px;
+            padding: 14px 18px; /* More padding */
+            border: 1px solid var(--border-color);
+            border-radius: 10px; /* More rounded */
             box-sizing: border-box;
             font-size: 1em;
+            color: var(--text-color);
+            background-color: #fcfcfc;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            background-color: #fdfdfd;
         }
+
         input[type="text"]:focus,
         input[type="date"]:focus,
         textarea:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+            border-color: var(--primary-color); /* Highlight with primary color */
+            box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.25); /* Primary color shadow */
             outline: none;
-            background-color: #fff;
+            background-color: var(--light-color);
         }
+
         textarea {
             resize: vertical;
-            min-height: 100px;
+            min-height: 120px; /* Taller textarea */
         }
+
         button {
-            background-color: #28a745;
-            color: white;
-            padding: 14px 28px;
+            background-color: var(--primary-color);
+            color: var(--light-color);
+            padding: 15px 30px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 1.2em;
             width: 100%;
+            font-weight: 700;
+            letter-spacing: 0.8px;
             transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.25);
+            display: flex; /* For loading spinner */
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
+
         button:hover {
-            background-color: #218838;
+            background-color: #43A047; /* Slightly darker green */
             transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.3);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.35);
         }
+
         button:active {
             transform: translateY(0);
-            box-shadow: 0 2px 5px rgba(40, 167, 69, 0.2);
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
         }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
         .message {
             margin-top: 30px;
-            padding: 15px;
-            border-radius: 8px;
+            padding: 18px;
+            border-radius: 10px;
             text-align: center;
             font-weight: 500;
-            font-size: 1.05em;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            font-size: 1.1em;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
             display: none; /* Default hidden */
+            animation: slideIn 0.5s ease-out;
         }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .message.success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background-color: var(--success-bg);
+            color: var(--success-text);
+            border: 1px solid #a3dfbb;
         }
+
         .message.error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background-color: var(--error-bg);
+            color: var(--error-text);
+            border: 1px solid #f2b3b7;
         }
+
         .message.info {
-            background-color: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
+            background-color: var(--info-bg);
+            color: var(--info-text);
+            border: 1px solid #a7d9ed;
         }
+
         small {
             color: #6c757d;
             font-size: 0.88em;
             margin-top: 5px;
             display: block;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -171,8 +243,16 @@
                 <label for="tglTurun">Tanggal Turun:</label>
                 <input type="date" id="tglTurun" name="tglTurun" required>
             </div>
+            
+            <div class="form-group">
+                <label for="keterangan">Keterangan:</label>
+                <textarea id="keterangan" name="keterangan" placeholder="Tambahkan catatan atau instruksi tambahan"></textarea>
+            </div>
 
-            <button type="submit">Kirim Notifikasi ke WA Vendor</button>
+            <button type="submit" id="submitButton">
+                Kirim Notifikasi ke WA Vendor
+                <span id="loadingSpinner" class="spinner" style="display: none;"></span>
+            </button>
         </form>
         <div id="responseMessage" class="message"></div>
     </div>
@@ -251,17 +331,22 @@
         ];
 
         // Mendapatkan referensi elemen DOM
+        const namaMateriEventInput = document.getElementById('namaMateriEvent');
+        const brandInput = document.getElementById('brand');
         const namaVendorInput = document.getElementById('namaVendor');
         const vendorList = document.getElementById('vendorList');
         const alamatPemasanganInput = document.getElementById('alamatPemasangan');
-        const alamatList = document.getElementById('alamatList'); // Datalist baru untuk alamat
+        const alamatList = document.getElementById('alamatList'); 
         const ukuranMateriInput = document.getElementById('ukuranMateri');
+        const timpaVisualInput = document.getElementById('timpaVisual');
+        const tglPasangInput = document.getElementById('tglPasang');
+        const tglTurunInput = document.getElementById('tglTurun');
+        const keteranganInput = document.getElementById('keterangan'); 
         const noTelpVendorInput = document.getElementById('noTelpVendor');
         const eventForm = document.getElementById('eventForm');
         const responseMessageDiv = document.getElementById('responseMessage');
-
-        // Variabel global untuk menyimpan alamat yang difilter saat nama vendor dipilih
-        let filteredAddressesForVendor = [];
+        const submitButton = document.getElementById('submitButton');
+        const loadingSpinner = document.getElementById('loadingSpinner');
 
         // Fungsi untuk menampilkan pesan respon
         function displayMessage(message, type) {
@@ -275,8 +360,9 @@
 
         // Fungsi untuk mengisi datalist Nama Vendor (unik)
         function populateVendorDatalist() {
-            vendorList.innerHTML = ''; // Bersihkan opsi lama
-            const uniqueVendors = [...new Set(rawVendorData.map(item => item.namaVendor))]; // Dapatkan nama vendor unik
+            vendorList.innerHTML = ''; 
+            const uniqueVendors = [...new Set(rawVendorData.map(item => item.namaVendor))]; 
+            uniqueVendors.sort(); // Urutkan secara alfabetis
             uniqueVendors.forEach(vendorName => {
                 const option = document.createElement('option');
                 option.value = vendorName;
@@ -287,36 +373,35 @@
 
         // Fungsi untuk mengisi datalist Alamat Pemasangan berdasarkan Nama Vendor yang dipilih
         function populateAlamatDatalist(selectedVendorName) {
-            alamatList.innerHTML = ''; // Bersihkan opsi lama
-            // Filter data untuk mendapatkan entri hanya dari vendor yang dipilih
-            filteredAddressesForVendor = rawVendorData.filter(item => 
+            alamatList.innerHTML = ''; 
+            const filteredAddresses = rawVendorData.filter(item => 
                 item.namaVendor.trim().toLowerCase() === selectedVendorName.toLowerCase()
-            );
+            ).map(item => item.alamatPemasangan);
             
-            // Dapatkan alamat unik dari vendor yang sudah difilter
-            const uniqueAddresses = [...new Set(filteredAddressesForVendor.map(item => item.alamatPemasangan))];
+            const uniqueAddresses = [...new Set(filteredAddresses)];
+            uniqueAddresses.sort(); 
             
             uniqueAddresses.forEach(address => {
                 const option = document.createElement('option');
                 option.value = address;
                 alamatList.appendChild(option);
             });
-            alamatPemasanganInput.value = ''; // Kosongkan alamat saat vendor berubah
-            ukuranMateriInput.value = ''; // Kosongkan ukuran materi juga
-            noTelpVendorInput.value = ''; // Kosongkan no telp juga
+            alamatPemasanganInput.value = ''; 
+            ukuranMateriInput.value = ''; 
+            noTelpVendorInput.value = ''; 
         }
 
         // Event listener ketika nilai input namaVendor berubah
         namaVendorInput.addEventListener('change', function() {
             const selectedVendorName = this.value.trim();
-            const foundEntries = rawVendorData.filter(vendor => vendor.namaVendor.trim().toLowerCase() === selectedVendorName.toLowerCase());
+            const foundEntriesForVendor = rawVendorData.filter(vendor => vendor.namaVendor.trim().toLowerCase() === selectedVendorName.toLowerCase());
 
-            if (foundEntries.length > 0) {
+            if (foundEntriesForVendor.length > 0) {
                 displayMessage('Data vendor ditemukan. Silakan pilih Alamat Pemasangan.', 'info');
-                populateAlamatDatalist(selectedVendorName); // Isi datalist alamat
+                populateAlamatDatalist(selectedVendorName); 
             } else {
                 displayMessage('Nama Vendor tidak ditemukan. Pilih dari daftar atau periksa ejaan.', 'error');
-                alamatList.innerHTML = ''; // Kosongkan datalist alamat
+                alamatList.innerHTML = ''; 
                 alamatPemasanganInput.value = '';
                 ukuranMateriInput.value = '';
                 noTelpVendorInput.value = '';
@@ -328,7 +413,6 @@
             const selectedAddress = this.value.trim();
             const selectedVendorName = namaVendorInput.value.trim();
 
-            // Cari entri spesifik yang cocok dengan vendor dan alamat
             const foundEntry = rawVendorData.find(item => 
                 item.namaVendor.trim().toLowerCase() === selectedVendorName.toLowerCase() &&
                 item.alamatPemasangan.trim().toLowerCase() === selectedAddress.toLowerCase()
@@ -350,24 +434,30 @@
         eventForm.addEventListener('submit', function(event) {
             event.preventDefault(); // Mencegah reload halaman
 
+            // Disable tombol dan tampilkan spinner
+            submitButton.disabled = true;
+            loadingSpinner.style.display = 'inline-block';
+            displayMessage('Memproses data...', 'info');
+
             // 1. Validasi Input
             const requiredFields = [
-                { id: 'namaMateriEvent', name: 'Nama Materi Event' },
-                { id: 'brand', name: 'Brand' },
-                { id: 'namaVendor', name: 'Nama Vendor' },
-                { id: 'alamatPemasangan', name: 'Alamat Pemasangan' },
-                { id: 'ukuranMateri', name: 'Ukuran Materi' },
-                { id: 'timpaVisual', name: 'Timpa Visual' },
-                { id: 'tglPasang', name: 'Tanggal Pasang' },
-                { id: 'tglTurun', name: 'Tanggal Turun' }
+                { id: 'namaMateriEvent', name: 'Nama Materi Event', element: namaMateriEventInput },
+                { id: 'brand', name: 'Brand', element: brandInput },
+                { id: 'namaVendor', name: 'Nama Vendor', element: namaVendorInput },
+                { id: 'alamatPemasangan', name: 'Alamat Pemasangan', element: alamatPemasanganInput },
+                { id: 'ukuranMateri', name: 'Ukuran Materi', element: ukuranMateriInput },
+                { id: 'timpaVisual', name: 'Timpa Visual', element: timpaVisualInput },
+                { id: 'tglPasang', name: 'Tanggal Pasang', element: tglPasangInput },
+                { id: 'tglTurun', name: 'Tanggal Turun', element: tglTurunInput }
             ];
 
             for (const field of requiredFields) {
-                const inputElement = document.getElementById(field.id);
-                if (!inputElement.value.trim()) {
+                if (!field.element.value.trim()) {
                     displayMessage(`${field.name} tidak boleh kosong.`, 'error');
-                    inputElement.focus();
-                    return; // Hentikan proses jika ada field kosong
+                    field.element.focus();
+                    submitButton.disabled = false; // Re-enable button
+                    loadingSpinner.style.display = 'none'; // Hide spinner
+                    return; 
                 }
             }
 
@@ -375,53 +465,69 @@
             const nomorWaTujuan = noTelpVendorInput.value.trim();
             if (!nomorWaTujuan) {
                 displayMessage('Nomor telepon vendor tidak ditemukan. Mohon pilih Nama Vendor dan Alamat Pemasangan yang valid dari daftar.', 'error');
+                submitButton.disabled = false; 
+                loadingSpinner.style.display = 'none';
                 return;
             }
-            // Validasi format nomor telepon sederhana (hanya angka)
             if (!/^\d+$/.test(nomorWaTujuan)) {
                 displayMessage('Format nomor telepon tidak valid (hanya angka).', 'error');
+                submitButton.disabled = false; 
+                loadingSpinner.style.display = 'none';
                 return;
             }
 
+
             // 3. Ambil Data Formulir untuk Pesan WhatsApp
-            const namaMateriEvent = document.getElementById('namaMateriEvent').value.trim();
-            const brand = document.getElementById('brand').value.trim();
-            const namaVendor = document.getElementById('namaVendor').value.trim();
-            const alamatPemasangan = document.getElementById('alamatPemasangan').value.trim();
-            const ukuranMateri = document.getElementById('ukuranMateri').value.trim();
-            const timpaVisual = document.getElementById('timpaVisual').value.trim();
-            const tglPasang = document.getElementById('tglPasang').value.trim();
-            const tglTurun = document.getElementById('tglTurun').value.trim();
+            const namaMateriEvent = namaMateriEventInput.value.trim();
+            const brand = brandInput.value.trim();
+            const namaVendor = namaVendorInput.value.trim();
+            const alamatPemasangan = alamatPemasanganInput.value.trim();
+            const ukuranMateri = ukuranMateriInput.value.trim();
+            const timpaVisual = timpaVisualInput.value.trim();
+            const tglPasang = tglPasangInput.value.trim();
+            const tglTurun = tglTurunInput.value.trim();
+            const keterangan = keteranganInput.value.trim(); 
 
             // 4. Format Pesan WhatsApp
-            const pesanWa =
-                `*NOTIFIKASI PEMASANGAN MATERI EVENT*\n\n` +
-                `*Nama Materi Event:* ${namaMateriEvent}\n` +
+            let pesanWa =
+                `*ORDERAN PEMASANGAN MATERI EVENT*\n\n` +
+                `*Nama Event:* ${namaMateriEvent}\n` +
                 `*Brand:* ${brand}\n` +
                 `*Nama Vendor:* ${namaVendor}\n` +
-                `*Alamat Pemasangan:* ${alamatPemasangan}\n` +
-                `*Ukuran Materi:* ${ukuranMateri}\n` +
+                `*Alamat :* ${alamatPemasangan}\n` +
+                `*Ukuran :* ${ukuranMateri}\n` +
                 `*Timpa Visual:* ${timpaVisual}\n` +
                 `*Tanggal Pasang:* ${tglPasang}\n` +
-                `*Tanggal Turun:* ${tglTurun}\n\n` +
-                `Mohon segera ditindaklanjuti. Terima kasih!`;
+                `*Tanggal Turun:* ${tglTurun}\n`;
+            
+            if (keterangan) {
+                pesanWa += `*Keterangan:* ${keterangan}\n`;
+            }
+
+            pesanWa += `\nMohon segera ditindaklanjuti. Terima kasih!`;
+
 
             // 5. Buka Link WhatsApp di Tab/Jendela Baru
-            try {
-                // encodeURIComponent memastikan semua karakter di pesan terenkode dengan benar untuk URL
-                window.open(`https://wa.me/${nomorWaTujuan}?text=${encodeURIComponent(pesanWa)}`, '_blank');
-                displayMessage('Link WhatsApp telah dibuka. Mohon konfirmasi pengiriman pesan di aplikasi WhatsApp.', 'success');
-                eventForm.reset(); // Mengatur ulang formulir setelah berhasil membuka link
-                // Bersihkan input readonly juga
-                alamatPemasanganInput.value = '';
-                ukuranMateriInput.value = '';
-                noTelpVendorInput.value = '';
-                populateVendorDatalist(); // Isi ulang datalist nama vendor
-                alamatList.innerHTML = ''; // Kosongkan datalist alamat
-            } catch (error) {
-                console.error("Gagal membuka link WhatsApp:", error);
-                displayMessage('Gagal membuka link WhatsApp. Pastikan Anda mengizinkan pop-up dan WhatsApp terinstal.', 'error');
-            }
+            // Menggunakan setTimeout untuk memberikan waktu spinner terlihat sebelum redirect
+            setTimeout(() => {
+                try {
+                    window.open(`https://wa.me/${nomorWaTujuan}?text=${encodeURIComponent(pesanWa)}`, '_blank');
+                    displayMessage('Link WhatsApp telah dibuka. Mohon konfirmasi pengiriman pesan di aplikasi WhatsApp.', 'success');
+                    eventForm.reset(); // Mengatur ulang formulir
+                    // Bersihkan input readonly/datalist juga
+                    alamatPemasanganInput.value = '';
+                    ukuranMateriInput.value = '';
+                    noTelpVendorInput.value = '';
+                    populateVendorDatalist(); 
+                    alamatList.innerHTML = ''; 
+                } catch (error) {
+                    console.error("Gagal membuka link WhatsApp:", error);
+                    displayMessage('Gagal membuka link WhatsApp. Pastikan Anda mengizinkan pop-up dan WhatsApp terinstal.', 'error');
+                } finally {
+                    submitButton.disabled = false; // Selalu re-enable button
+                    loadingSpinner.style.display = 'none'; // Selalu hide spinner
+                }
+            }, 1000); // Jeda 1 detik agar spinner terlihat
         });
     </script>
 </body>
