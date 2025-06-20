@@ -10,6 +10,7 @@
         :root {
             --primary-color: #4CAF50; /* Green */
             --secondary-color: #f8f9fa; /* Light Gray */
+            --light-color: #ffffff; /* Tambahkan definisi untuk light-color */
             --text-color: #343a40; /* Dark Gray */
             --border-color: #ced4da; /* Gray Border */
             --focus-border-color: #80bdff; /* Blue for focus */
@@ -213,15 +214,14 @@
             <div class="form-group">
                 <label for="namaVendor">Nama Vendor:</label>
                 <input type="text" id="namaVendor" name="namaVendor" list="vendorList" required placeholder="Ketik atau pilih nama vendor">
-                <datalist id="vendorList">
-                    </datalist>
-                <input type="hidden" id="noTelpVendor" name="noTelpVendor"> </div>
+                <datalist id="vendorList"></datalist>
+                <input type="hidden" id="noTelpVendor" name="noTelpVendor">
+            </div>
 
             <div class="form-group">
                 <label for="alamatPemasangan">Alamat Pemasangan:</label>
                 <input type="text" id="alamatPemasangan" name="alamatPemasangan" list="alamatList" required placeholder="Pilih atau ketik alamat pemasangan">
-                <datalist id="alamatList">
-                    </datalist>
+                <datalist id="alamatList"></datalist>
             </div>
 
             <div class="form-group">
@@ -262,75 +262,75 @@
         // Format nomor telepon: Kode negara + Nomor (tanpa spasi atau karakter lain, tanpa 0 di awal)
         // Contoh: 6281234567890 untuk nomor Indonesia
         const rawVendorData = [
-                {"namaVendor": "LINTAS MEDIATAMA", "alamatPemasangan": "BALIHO Jl. Astana Anyar - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "6282216869954"},
-                {"namaVendor": "MITRA PROMO SEDAYA", "alamatPemasangan": "BALIHO Jl. Cikawao - 6 m x 4 m FL", "ukuranMateri": "Baliho 6x4 m FL", "noTelp": "62811234570"},
-                {"namaVendor": "SUMBER SARANA PROMO", "alamatPemasangan": "BALIHO Jl. Gatot Subroto-Burangrang (Depan Bank Niaga) - 6 m x 4 m FL", "ukuranMateri": "Baliho 6x4 m FL", "noTelp": "6281220470979"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Otto Iskandardinata (Depan Terminal Tegalega) - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "62812235934648"},
-                {"namaVendor": "RAGAM MEDIA PROMO", "alamatPemasangan": "BALIHO Jl. Soekarno Hatta 436 - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "6281321781071"},
-                {"namaVendor": "MITRA PROMO SEDAYA", "alamatPemasangan": "BALIHO Jl. Sumbawa - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "62811234570"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Tamblong Depan Troy Cafe - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "62812235934648"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Perempatan Buah Batu-Soekarno Hatta - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "62812235934648"},
-                {"namaVendor": "BUNGA MEGA LESTARI", "alamatPemasangan": "BILLBOARD Jl. Ahmad Yani (Baranangsiang) - Pasar Kosambi - 10 m x 5 m FL", "ukuranMateri": "Billboard 10x5 FL", "noTelp": "628112150666"},
-                {"namaVendor": "SUMBER SARANA PROMO", "alamatPemasangan": "BILLBOARD Jl. Kopo - Jl. Pasirkoja - 5 m x 10 m FL", "ukuranMateri": "Billboard 5x10 FL", "noTelp": "6281220470979"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "LED Jl. Braga - 3 m x 6 m BL", "ukuranMateri": "LED 3x6 BL", "noTelp": "62812235934648"},
-                {"namaVendor": "MULTI ADHI PERKASA", "alamatPemasangan": "MIDIS Jl. Karapitan - 4 m x 2 m BL", "ukuranMateri": "MIDIS 4x2 BL", "noTelp": "6285101736600"},
-                {"namaVendor": "GA PROMOSINDO", "alamatPemasangan": "MIDIS Jl. Moh. Toha ( Dekat Lampu Merah Simpang BKR) - 2 m x 4 m BL", "ukuranMateri": "MIDIS 2x4 BL", "noTelp": "6281320389035"},
-                {"namaVendor": "BOMA CIPTA CITRA", "alamatPemasangan": "PJU Jl. Ahmad Yani - 2 m x 1 m BL(5 titik)", "ukuranMateri": "PJU 2x1 BL", "noTelp": "628112056886"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "PJU Jl. Sunda - 3 m x 2 m BL(4 titik)", "ukuranMateri": "PJU 3x2 BL", "noTelp": "62812235934648"},
-                {"namaVendor": "TOTAL ARGA MANDIRI", "alamatPemasangan": "PJU Jl. Talaga Bodas - 2 m x 1 m BL(7 titik)", "ukuranMateri": "PJU 2x1 BL", "noTelp": "6287824611345"},
-                {"namaVendor": "ARCO TRITAMA MANDIRI", "alamatPemasangan": "BALIHO Batas Kota, Cibeureum - 6 m x 4 m BL", "ukuranMateri": "BALIHO 6x4 BL", "noTelp": "628112238600"},
-                {"namaVendor": "ALUMADA KARYA PRATAMA", "alamatPemasangan": "BALIHO Jl. Rajawali Timur - Depan Toko Lani - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "6287700417880"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Raya Cijerah (depan pasar Cijerah) - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "62812235934648"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Sindangpalay (Cigondewah) - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "62812235934648"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Sudirman (Pertigaan Jl. Jambal) - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "62812235934648"},
-                {"namaVendor": "MITRA PROMO SEDAYA", "alamatPemasangan": "BILLBOARD Jl. Jamika-Pasirkoja - 8 m x 4 m FL", "ukuranMateri": "BILLBOARD 8x4 FL", "noTelp": "62811234570"},
-                {"namaVendor": "BOMA CIPTA CITRA", "alamatPemasangan": "BILLBOARD Jl. Pasirkaliki (Paskal 23 Mall) - 5 m x 10 m BL", "ukuranMateri": "BILLBOARD 23x5 BL", "noTelp": "628112056886"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BILLBOARD Jl. Soekarno Hatta No. 244 (Pool Bus Arimbi) - 10 m x 5 m FL", "ukuranMateri": "BILLBOARD 244x10 FL", "noTelp": "62812235934648"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "LED Mall Paskal 23 - 2 m x 8 m BL", "ukuranMateri": "LED 23x2 BL", "noTelp": "62812235934648"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Margacinta (dekat Borma) - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "62812235934648"},
-                {"namaVendor": "ALUMADA KARYA PRATAMA", "alamatPemasangan": "BILLBOARD Jl. H. Mustofa (Master Clean Carwash) - 8 m x 4 m FL", "ukuranMateri": "BILLBOARD 8x4 FL", "noTelp": "6287700417880"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BILLBOARD Jl. Terusan Jakarta (Antapani) - 8 m x 4 m FL", "ukuranMateri": "BILLBOARD 8x4 FL", "noTelp": "62812235934648"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Cikutra Barat (dekat Borma) - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "62812235934648"},
-                {"namaVendor": "ALUMADA KARYA PRATAMA", "alamatPemasangan": "BALIHO Jl. Dipatiukur No 68 - 6 m x 4 m BL", "ukuranMateri": "BALIHO 68x6 BL", "noTelp": "6287700417880"},
-                {"namaVendor": "MITRA PROMO SEDAYA", "alamatPemasangan": "BALIHO Jl. Dipatiukur, Simpang Dago - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "62811234570"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Sumur Bandung - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "62812235934648"},
-                {"namaVendor": "ARIAL TRI AD", "alamatPemasangan": "BALIHO Jl. Trunojoyo depan Total Buah - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "628112272365"},
-                {"namaVendor": "SUMBER SARANA PROMO", "alamatPemasangan": "BILLBOARD Jl Suci-Pahlawan (Perempatan) - 5 m x 10 m FL", "ukuranMateri": "BILLBOARD 5x10 FL", "noTelp": "6281220470979"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BILLBOARD Jl. Cihampelas (Depan STBA) - 10 m x 5 m FL", "ukuranMateri": "BILLBOARD 10x5 FL", "noTelp": "62812235934648"},
-                {"namaVendor": "LINTAS MEDIATAMA", "alamatPemasangan": "LED Jl. Ir. H. Djuanda (BCA) - 4 m x 8 m BL", "ukuranMateri": "LED 4x8 BL", "noTelp": "6282216869954"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "MIDIS Jl. Hariang Banga depan No. 3 - 2 m x 4 m BL", "ukuranMateri": "MIDIS 3x2 BL", "noTelp": "62812235934648"},
-                {"namaVendor": "TOTAL ARGA MANDIRI", "alamatPemasangan": "MIDIS Jl. Ir. H Djuanda - Pasar Simpang Dago - 2 m x 4 m BL", "ukuranMateri": "MIDIS 2x4 BL", "noTelp": "6287824611345"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "PJU Jl. Cihampelas bawah - 3 m x 2 m BL(4 titik)", "ukuranMateri": "PJU 3x2 BL", "noTelp": "62812235934648"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "PJU Jl. LLRE Martadinata (Patung Macan) - 2 m x 1 m BL(5 titik)", "ukuranMateri": "PJU 2x1 BL", "noTelp": "62812235934648"},
-                {"namaVendor": "MULTI ADHI PERKASA", "alamatPemasangan": "PJU Jl. Lombok - 2 m x 1 m BL(5 titik)", "ukuranMateri": "PJU 2x1 BL", "noTelp": "6285101736600"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Depan Peti Kemas Gedebage - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "62812235934648"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Darwati (Sapan) - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "62812235934648"},
-                {"namaVendor": "MULTI ADHI PERKASA", "alamatPemasangan": "BALIHO Depan SPBU Laswi - 6 m x 4 m BL", "ukuranMateri": "BALIHO 6x4 BL", "noTelp": "6285101736600"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Jakarta (Dekat GOR KONI) - 6 m x 4 m BL", "ukuranMateri": "BALIHO 6x4 BL", "noTelp": "62812235934648"},
-                {"namaVendor": "MEDIA KREASI CIPTA INDONESIA", "alamatPemasangan": "BILLBOARD Jl. Gatot Subroto (Depan TSM) - 10 m x 5 m BL", "ukuranMateri": "BILLBOARD 10x5 BL", "noTelp": "6285713340466"},
-                {"namaVendor": "MITRA PROMO SEDAYA", "alamatPemasangan": "BILLBOARD Jl. Kiaracondong - 10 m x 5 m BL", "ukuranMateri": "BILLBOARD 10x5 BL", "noTelp": "62811234570"},
-                {"namaVendor": "SUMBER SARANA PROMO", "alamatPemasangan": "BILLBOARD Jl. Laswi - Jl. Sukabumi - 5 m x 10 m FL", "ukuranMateri": "BILLBOARD 5x10 FL", "noTelp": "6281220470979"},
-                {"namaVendor": "MULTI ADHI PERKASA", "alamatPemasangan": "BILLBOARD Terminal Cicaheum - 8 m x 4 m FL", "ukuranMateri": "BILLBOARD 8x4 FL", "noTelp": "6285101736600"},
-                {"namaVendor": "TRI BANGUN KREASINDO", "alamatPemasangan": "BALIHO Jl. Kopo (dekat exit tol Kopo) - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "6289689217163"},
-                {"namaVendor": "RAGAM MEDIA PROMO", "alamatPemasangan": "BALIHO Jl. Kopo Bihbul (Pertigaan Kopo Permai) - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "6281321781071"},
-                {"namaVendor": "MULTI ADHI PERKASA", "alamatPemasangan": "BALIHO Jl. Leuwi panjang - 6 m x 4 m BL", "ukuranMateri": "BALIHO 6x4 BL", "noTelp": "6285101736600"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Raya Cibaduyut - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "62812235934648"},
-                {"namaVendor": "ALUMADA KARYA PRATAMA", "alamatPemasangan": "BALIHO Jl. Ciumbuleuit - Depan Toko 37 - 6 m x 4 m FL", "ukuranMateri": "BALIHO Depan Toko 37x6 FL", "noTelp": "6287700417880"},
-                {"namaVendor": "TOTAL ARGA MANDIRI", "alamatPemasangan": "BALIHO Jl. Dakota - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "6287824611345"},
-                {"namaVendor": "LINTAS MEDIATAMA", "alamatPemasangan": "BALIHO Jl. Gerlong (Pertigaan NHI) - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "6282216869954"},
-                {"namaVendor": "LINTAS MEDIATAMA", "alamatPemasangan": "BALIHO Jl. Surya Sumantri (Maranatha) - 6 m x 4 m BL", "ukuranMateri": "BALIHO 6x4 BL", "noTelp": "6282216869954"},
-                {"namaVendor": "SHINTA ADVERTENSI", "alamatPemasangan": "BILLBOARD Jl. Otista Cicendo - 10 m x 5 m BL", "ukuranMateri": "BILLBOARD 10x5 BL", "noTelp": "628122391417"},
-                {"namaVendor": "MEDIA SIGN", "alamatPemasangan": "BILLBOARD Jl. Sukajadi 106 - 10 m x 5 m FL", "ukuranMateri": "BILLBOARD 106x10 FL", "noTelp": "6281320308721"},
-                {"namaVendor": "INDRA NUGRAHA", "alamatPemasangan": "BILLBOARD Seberang Terminal Ledeng - 10 m x 5 m FL", "ukuranMateri": "BILLBOARD 10x5 FL", "noTelp": "6281220092555"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "MIDIS Jl. Sindang Sirna - 2 m x 4 m BL", "ukuranMateri": "MIDIS 2x4 BL", "noTelp": "62812235934648"},
-                {"namaVendor": "SUMBER SARANA PROMO", "alamatPemasangan": "PJU Jl. Setiabudi - 2 m x 3 m BL(4 titik)", "ukuranMateri": "PJU 2x3 BL", "noTelp": "6281220470979"},
-                {"namaVendor": "ARCO TRITAMA MANDIRI", "alamatPemasangan": "PJU Jl. Surya Sumantri - 2 m x 1 m BL(5 titik)", "ukuranMateri": "PJU 2x1 BL", "noTelp": "628112238600"},
-                {"namaVendor": "LINTAS MEDIATAMA", "alamatPemasangan": "BALIHO Jl. AH. Nasution-Arcamanik - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "6282216869954"},
-                {"namaVendor": "MITRA PROMO SEDAYA", "alamatPemasangan": "BALIHO Pasar Ujung Berung - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "62811234570"},
-                {"namaVendor": "MULTI ADHI PERKASA", "alamatPemasangan": "LED Jl. Soekarno Hatta (Progressive) - 6 m x 4 m BL", "ukuranMateri": "LED 6x4 BL", "noTelp": "6285101736600"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Djunjunan - 6 m x 4 m BL", "ukuranMateri": "BALIHO 6x4 BL", "noTelp": "62812235934648"},
-                {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "PJU Lapangan Supratman - 2 m x 1 m BL(3 titik)", "ukuranMateri": "PJU 2x1 BL", "noTelp": "62812235934648"}
-           ];
+            {"namaVendor": "LINTAS MEDIATAMA", "alamatPemasangan": "BALIHO Jl. Astana Anyar - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "6282216869954"},
+            {"namaVendor": "MITRA PROMO SEDAYA", "alamatPemasangan": "BALIHO Jl. Cikawao - 6 m x 4 m FL", "ukuranMateri": "Baliho 6x4 m FL", "noTelp": "62811234570"},
+            {"namaVendor": "SUMBER SARANA PROMO", "alamatPemasangan": "BALIHO Jl. Gatot Subroto-Burangrang (Depan Bank Niaga) - 6 m x 4 m FL", "ukuranMateri": "Baliho 6x4 m FL", "noTelp": "6281220470979"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Otto Iskandardinata (Depan Terminal Tegalega) - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "62812235934648"},
+            {"namaVendor": "RAGAM MEDIA PROMO", "alamatPemasangan": "BALIHO Jl. Soekarno Hatta 436 - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "6281321781071"},
+            {"namaVendor": "MITRA PROMO SEDAYA", "alamatPemasangan": "BALIHO Jl. Sumbawa - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "62811234570"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Tamblong Depan Troy Cafe - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "62812235934648"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Perempatan Buah Batu-Soekarno Hatta - 6 m x 4 m BL", "ukuranMateri": "Baliho 6x4 m BL", "noTelp": "62812235934648"},
+            {"namaVendor": "BUNGA MEGA LESTARI", "alamatPemasangan": "BILLBOARD Jl. Ahmad Yani (Baranangsiang) - Pasar Kosambi - 10 m x 5 m FL", "ukuranMateri": "Billboard 10x5 FL", "noTelp": "628112150666"},
+            {"namaVendor": "SUMBER SARANA PROMO", "alamatPemasangan": "BILLBOARD Jl. Kopo - Jl. Pasirkoja - 5 m x 10 m FL", "ukuranMateri": "Billboard 5x10 FL", "noTelp": "6281220470979"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "LED Jl. Braga - 3 m x 6 m BL", "ukuranMateri": "LED 3x6 BL", "noTelp": "62812235934648"},
+            {"namaVendor": "MULTI ADHI PERKASA", "alamatPemasangan": "MIDIS Jl. Karapitan - 4 m x 2 m BL", "ukuranMateri": "MIDIS 4x2 BL", "noTelp": "6285101736600"},
+            {"namaVendor": "GA PROMOSINDO", "alamatPemasangan": "MIDIS Jl. Moh. Toha ( Dekat Lampu Merah Simpang BKR) - 2 m x 4 m BL", "ukuranMateri": "MIDIS 2x4 BL", "noTelp": "6281320389035"},
+            {"namaVendor": "BOMA CIPTA CITRA", "alamatPemasangan": "PJU Jl. Ahmad Yani - 2 m x 1 m BL(5 titik)", "ukuranMateri": "PJU 2x1 BL", "noTelp": "628112056886"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "PJU Jl. Sunda - 3 m x 2 m BL(4 titik)", "ukuranMateri": "PJU 3x2 BL", "noTelp": "62812235934648"},
+            {"namaVendor": "TOTAL ARGA MANDIRI", "alamatPemasangan": "PJU Jl. Talaga Bodas - 2 m x 1 m BL(7 titik)", "ukuranMateri": "PJU 2x1 BL", "noTelp": "6287824611345"},
+            {"namaVendor": "ARCO TRITAMA MANDIRI", "alamatPemasangan": "BALIHO Batas Kota, Cibeureum - 6 m x 4 m BL", "ukuranMateri": "BALIHO 6x4 BL", "noTelp": "628112238600"},
+            {"namaVendor": "ALUMADA KARYA PRATAMA", "alamatPemasangan": "BALIHO Jl. Rajawali Timur - Depan Toko Lani - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "6287700417880"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Raya Cijerah (depan pasar Cijerah) - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "62812235934648"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Sindangpalay (Cigondewah) - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "62812235934648"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Sudirman (Pertigaan Jl. Jambal) - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "62812235934648"},
+            {"namaVendor": "MITRA PROMO SEDAYA", "alamatPemasangan": "BILLBOARD Jl. Jamika-Pasirkoja - 8 m x 4 m FL", "ukuranMateri": "BILLBOARD 8x4 FL", "noTelp": "62811234570"},
+            {"namaVendor": "BOMA CIPTA CITRA", "alamatPemasangan": "BILLBOARD Jl. Pasirkaliki (Paskal 23 Mall) - 5 m x 10 m BL", "ukuranMateri": "BILLBOARD 23x5 BL", "noTelp": "628112056886"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BILLBOARD Jl. Soekarno Hatta No. 244 (Pool Bus Arimbi) - 10 m x 5 m FL", "ukuranMateri": "BILLBOARD 244x10 FL", "noTelp": "62812235934648"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "LED Mall Paskal 23 - 2 m x 8 m BL", "ukuranMateri": "LED 23x2 BL", "noTelp": "62812235934648"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Margacinta (dekat Borma) - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "62812235934648"},
+            {"namaVendor": "ALUMADA KARYA PRATAMA", "alamatPemasangan": "BILLBOARD Jl. H. Mustofa (Master Clean Carwash) - 8 m x 4 m FL", "ukuranMateri": "BILLBOARD 8x4 FL", "noTelp": "6287700417880"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BILLBOARD Jl. Terusan Jakarta (Antapani) - 8 m x 4 m FL", "ukuranMateri": "BILLBOARD 8x4 FL", "noTelp": "62812235934648"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Cikutra Barat (dekat Borma) - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "62812235934648"},
+            {"namaVendor": "ALUMADA KARYA PRATAMA", "alamatPemasangan": "BALIHO Jl. Dipatiukur No 68 - 6 m x 4 m BL", "ukuranMateri": "BALIHO 68x6 BL", "noTelp": "6287700417880"},
+            {"namaVendor": "MITRA PROMO SEDAYA", "alamatPemasangan": "BALIHO Jl. Dipatiukur, Simpang Dago - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "62811234570"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Sumur Bandung - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "62812235934648"},
+            {"namaVendor": "ARIAL TRI AD", "alamatPemasangan": "BALIHO Jl. Trunojoyo depan Total Buah - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "628112272365"},
+            {"namaVendor": "SUMBER SARANA PROMO", "alamatPemasangan": "BILLBOARD Jl Suci-Pahlawan (Perempatan) - 5 m x 10 m FL", "ukuranMateri": "BILLBOARD 5x10 FL", "noTelp": "6281220470979"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BILLBOARD Jl. Cihampelas (Depan STBA) - 10 m x 5 m FL", "ukuranMateri": "BILLBOARD 10x5 FL", "noTelp": "62812235934648"},
+            {"namaVendor": "LINTAS MEDIATAMA", "alamatPemasangan": "LED Jl. Ir. H. Djuanda (BCA) - 4 m x 8 m BL", "ukuranMateri": "LED 4x8 BL", "noTelp": "6282216869954"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "MIDIS Jl. Hariang Banga depan No. 3 - 2 m x 4 m BL", "ukuranMateri": "MIDIS 3x2 BL", "noTelp": "62812235934648"},
+            {"namaVendor": "TOTAL ARGA MANDIRI", "alamatPemasangan": "MIDIS Jl. Ir. H Djuanda - Pasar Simpang Dago - 2 m x 4 m BL", "ukuranMateri": "MIDIS 2x4 BL", "noTelp": "6287824611345"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "PJU Jl. Cihampelas bawah - 3 m x 2 m BL(4 titik)", "ukuranMateri": "PJU 3x2 BL", "noTelp": "62812235934648"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "PJU Jl. LLRE Martadinata (Patung Macan) - 2 m x 1 m BL(5 titik)", "ukuranMateri": "PJU 2x1 BL", "noTelp": "62812235934648"},
+            {"namaVendor": "MULTI ADHI PERKASA", "alamatPemasangan": "PJU Jl. Lombok - 2 m x 1 m BL(5 titik)", "ukuranMateri": "PJU 2x1 BL", "noTelp": "6285101736600"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Depan Peti Kemas Gedebage - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "62812235934648"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Darwati (Sapan) - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "62812235934648"},
+            {"namaVendor": "MULTI ADHI PERKASA", "alamatPemasangan": "BALIHO Depan SPBU Laswi - 6 m x 4 m BL", "ukuranMateri": "BALIHO 6x4 BL", "noTelp": "6285101736600"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Jakarta (Dekat GOR KONI) - 6 m x 4 m BL", "ukuranMateri": "BALIHO 6x4 BL", "noTelp": "62812235934648"},
+            {"namaVendor": "MEDIA KREASI CIPTA INDONESIA", "alamatPemasangan": "BILLBOARD Jl. Gatot Subroto (Depan TSM) - 10 m x 5 m BL", "ukuranMateri": "BILLBOARD 10x5 BL", "noTelp": "6285713340466"},
+            {"namaVendor": "MITRA PROMO SEDAYA", "alamatPemasangan": "BILLBOARD Jl. Kiaracondong - 10 m x 5 m BL", "ukuranMateri": "BILLBOARD 10x5 BL", "noTelp": "62811234570"},
+            {"namaVendor": "SUMBER SARANA PROMO", "alamatPemasangan": "BILLBOARD Jl. Laswi - Jl. Sukabumi - 5 m x 10 m FL", "ukuranMateri": "BILLBOARD 5x10 FL", "noTelp": "6281220470979"},
+            {"namaVendor": "MULTI ADHI PERKASA", "alamatPemasangan": "BILLBOARD Terminal Cicaheum - 8 m x 4 m FL", "ukuranMateri": "BILLBOARD 8x4 FL", "noTelp": "6285101736600"},
+            {"namaVendor": "TRI BANGUN KREASINDO", "alamatPemasangan": "BALIHO Jl. Kopo (dekat exit tol Kopo) - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "6289689217163"},
+            {"namaVendor": "RAGAM MEDIA PROMO", "alamatPemasangan": "BALIHO Jl. Kopo Bihbul (Pertigaan Kopo Permai) - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "6281321781071"},
+            {"namaVendor": "MULTI ADHI PERKASA", "alamatPemasangan": "BALIHO Jl. Leuwi panjang - 6 m x 4 m BL", "ukuranMateri": "BALIHO 6x4 BL", "noTelp": "6285101736600"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Raya Cibaduyut - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "62812235934648"},
+            {"namaVendor": "ALUMADA KARYA PRATAMA", "alamatPemasangan": "BALIHO Jl. Ciumbuleuit - Depan Toko 37 - 6 m x 4 m FL", "ukuranMateri": "BALIHO Depan Toko 37x6 FL", "noTelp": "6287700417880"},
+            {"namaVendor": "TOTAL ARGA MANDIRI", "alamatPemasangan": "BALIHO Jl. Dakota - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "6287824611345"},
+            {"namaVendor": "LINTAS MEDIATAMA", "alamatPemasangan": "BALIHO Jl. Gerlong (Pertigaan NHI) - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "6282216869954"},
+            {"namaVendor": "LINTAS MEDIATAMA", "alamatPemasangan": "BALIHO Jl. Surya Sumantri (Maranatha) - 6 m x 4 m BL", "ukuranMateri": "BALIHO 6x4 BL", "noTelp": "6282216869954"},
+            {"namaVendor": "SHINTA ADVERTENSI", "alamatPemasangan": "BILLBOARD Jl. Otista Cicendo - 10 m x 5 m BL", "ukuranMateri": "BILLBOARD 10x5 BL", "noTelp": "628122391417"},
+            {"namaVendor": "MEDIA SIGN", "alamatPemasangan": "BILLBOARD Jl. Sukajadi 106 - 10 m x 5 m FL", "ukuranMateri": "BILLBOARD 106x10 FL", "noTelp": "6281320308721"},
+            {"namaVendor": "INDRA NUGRAHA", "alamatPemasangan": "BILLBOARD Seberang Terminal Ledeng - 10 m x 5 m FL", "ukuranMateri": "BILLBOARD 10x5 FL", "noTelp": "6281220092555"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "MIDIS Jl. Sindang Sirna - 2 m x 4 m BL", "ukuranMateri": "MIDIS 2x4 BL", "noTelp": "62812235934648"},
+            {"namaVendor": "SUMBER SARANA PROMO", "alamatPemasangan": "PJU Jl. Setiabudi - 2 m x 3 m BL(4 titik)", "ukuranMateri": "PJU 2x3 BL", "noTelp": "6281220470979"},
+            {"namaVendor": "ARCO TRITAMA MANDIRI", "alamatPemasangan": "PJU Jl. Surya Sumantri - 2 m x 1 m BL(5 titik)", "ukuranMateri": "PJU 2x1 BL", "noTelp": "628112238600"},
+            {"namaVendor": "LINTAS MEDIATAMA", "alamatPemasangan": "BALIHO Jl. AH. Nasution-Arcamanik - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "6282216869954"},
+            {"namaVendor": "MITRA PROMO SEDAYA", "alamatPemasangan": "BALIHO Pasar Ujung Berung - 6 m x 4 m FL", "ukuranMateri": "BALIHO 6x4 FL", "noTelp": "62811234570"},
+            {"namaVendor": "MULTI ADHI PERKASA", "alamatPemasangan": "LED Jl. Soekarno Hatta (Progressive) - 6 m x 4 m BL", "ukuranMateri": "LED 6x4 BL", "noTelp": "6285101736600"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "BALIHO Jl. Djunjunan - 6 m x 4 m BL", "ukuranMateri": "BALIHO 6x4 BL", "noTelp": "62812235934648"},
+            {"namaVendor": "NUANSA FAJAR", "alamatPemasangan": "PJU Lapangan Supratman - 2 m x 1 m BL(3 titik)", "ukuranMateri": "PJU 2x1 BL", "noTelp": "62812235934648"}
+        ];
 
         // Mendapatkan referensi elemen DOM
         const namaMateriEventInput = document.getElementById('namaMateriEvent');
@@ -338,12 +338,12 @@
         const namaVendorInput = document.getElementById('namaVendor');
         const vendorList = document.getElementById('vendorList');
         const alamatPemasanganInput = document.getElementById('alamatPemasangan');
-        const alamatList = document.getElementById('alamatList'); 
+        const alamatList = document.getElementById('alamatList');
         const ukuranMateriInput = document.getElementById('ukuranMateri');
         const timpaVisualInput = document.getElementById('timpaVisual');
         const tglPasangInput = document.getElementById('tglPasang');
         const tglTurunInput = document.getElementById('tglTurun');
-        const keteranganInput = document.getElementById('keterangan'); 
+        const keteranganInput = document.getElementById('keterangan');
         const noTelpVendorInput = document.getElementById('noTelpVendor');
         const eventForm = document.getElementById('eventForm');
         const responseMessageDiv = document.getElementById('responseMessage');
@@ -362,8 +362,9 @@
 
         // Fungsi untuk mengisi datalist Nama Vendor (unik)
         function populateVendorDatalist() {
-            vendorList.innerHTML = ''; 
-            const uniqueVendors = [...new Set(rawVendorData.map(item => item.namaVendor))]; 
+            vendorList.innerHTML = '';
+            // Menggunakan Set untuk mendapatkan nama vendor yang unik
+            const uniqueVendors = [...new Set(rawVendorData.map(item => item.namaVendor))];
             uniqueVendors.sort(); // Urutkan secara alfabetis
             uniqueVendors.forEach(vendorName => {
                 const option = document.createElement('option');
@@ -375,22 +376,26 @@
 
         // Fungsi untuk mengisi datalist Alamat Pemasangan berdasarkan Nama Vendor yang dipilih
         function populateAlamatDatalist(selectedVendorName) {
-            alamatList.innerHTML = ''; 
-            const filteredAddresses = rawVendorData.filter(item => 
+            alamatList.innerHTML = '';
+            // Filter data berdasarkan nama vendor yang dipilih (case-insensitive)
+            const filteredAddresses = rawVendorData.filter(item =>
                 item.namaVendor.trim().toLowerCase() === selectedVendorName.toLowerCase()
             ).map(item => item.alamatPemasangan);
             
+            // Dapatkan alamat unik dan urutkan
             const uniqueAddresses = [...new Set(filteredAddresses)];
-            uniqueAddresses.sort(); 
+            uniqueAddresses.sort();
             
             uniqueAddresses.forEach(address => {
                 const option = document.createElement('option');
                 option.value = address;
                 alamatList.appendChild(option);
             });
-            alamatPemasanganInput.value = ''; 
-            ukuranMateriInput.value = ''; 
-            noTelpVendorInput.value = ''; 
+
+            // Reset alamat dan ukuran materi jika vendor berubah
+            alamatPemasanganInput.value = '';
+            ukuranMateriInput.value = '';
+            noTelpVendorInput.value = '';
         }
 
         // Event listener ketika nilai input namaVendor berubah
@@ -399,11 +404,11 @@
             const foundEntriesForVendor = rawVendorData.filter(vendor => vendor.namaVendor.trim().toLowerCase() === selectedVendorName.toLowerCase());
 
             if (foundEntriesForVendor.length > 0) {
-                displayMessage('Data vendor ditemukan. Silakan pilih Alamat Pemasangan.', 'info');
-                populateAlamatDatalist(selectedVendorName); 
+                // displayMessage('Data vendor ditemukan. Silakan pilih Alamat Pemasangan.', 'info'); // Opsional: pesan ini bisa sedikit mengganggu
+                populateAlamatDatalist(selectedVendorName);
             } else {
-                displayMessage('Nama Vendor tidak ditemukan. Pilih dari daftar atau periksa ejaan.', 'error');
-                alamatList.innerHTML = ''; 
+                displayMessage('Nama Vendor tidak ditemukan dalam daftar. Harap pilih dari saran yang muncul.', 'error');
+                alamatList.innerHTML = ''; // Kosongkan datalist alamat
                 alamatPemasanganInput.value = '';
                 ukuranMateriInput.value = '';
                 noTelpVendorInput.value = '';
@@ -415,7 +420,8 @@
             const selectedAddress = this.value.trim();
             const selectedVendorName = namaVendorInput.value.trim();
 
-            const foundEntry = rawVendorData.find(item => 
+            // Cari entri yang cocok berdasarkan nama vendor DAN alamat pemasangan
+            const foundEntry = rawVendorData.find(item =>
                 item.namaVendor.trim().toLowerCase() === selectedVendorName.toLowerCase() &&
                 item.alamatPemasangan.trim().toLowerCase() === selectedAddress.toLowerCase()
             );
@@ -427,7 +433,7 @@
             } else {
                 ukuranMateriInput.value = '';
                 noTelpVendorInput.value = '';
-                displayMessage('Alamat pemasangan tidak valid untuk vendor ini. Pilih dari daftar atau periksa ejaan.', 'error');
+                displayMessage('Alamat pemasangan tidak valid untuk vendor ini. Harap pilih dari saran yang muncul.', 'error');
             }
         });
 
@@ -459,7 +465,7 @@
                     field.element.focus();
                     submitButton.disabled = false; // Re-enable button
                     loadingSpinner.style.display = 'none'; // Hide spinner
-                    return; 
+                    return;
                 }
             }
 
@@ -467,13 +473,13 @@
             const nomorWaTujuan = noTelpVendorInput.value.trim();
             if (!nomorWaTujuan) {
                 displayMessage('Nomor telepon vendor tidak ditemukan. Mohon pilih Nama Vendor dan Alamat Pemasangan yang valid dari daftar.', 'error');
-                submitButton.disabled = false; 
+                submitButton.disabled = false;
                 loadingSpinner.style.display = 'none';
                 return;
             }
             if (!/^\d+$/.test(nomorWaTujuan)) {
                 displayMessage('Format nomor telepon tidak valid (hanya angka).', 'error');
-                submitButton.disabled = false; 
+                submitButton.disabled = false;
                 loadingSpinner.style.display = 'none';
                 return;
             }
@@ -488,7 +494,7 @@
             const timpaVisual = timpaVisualInput.value.trim();
             const tglPasang = tglPasangInput.value.trim();
             const tglTurun = tglTurunInput.value.trim();
-            const keterangan = keteranganInput.value.trim(); 
+            const keterangan = keteranganInput.value.trim();
 
             // 4. Format Pesan WhatsApp
             let pesanWa =
@@ -520,8 +526,8 @@
                     alamatPemasanganInput.value = '';
                     ukuranMateriInput.value = '';
                     noTelpVendorInput.value = '';
-                    populateVendorDatalist(); 
-                    alamatList.innerHTML = ''; 
+                    populateVendorDatalist(); // Panggil lagi untuk memastikan datalist vendor terisi setelah reset
+                    alamatList.innerHTML = ''; // Kosongkan datalist alamat setelah reset
                 } catch (error) {
                     console.error("Gagal membuka link WhatsApp:", error);
                     displayMessage('Gagal membuka link WhatsApp. Pastikan Anda mengizinkan pop-up dan WhatsApp terinstal.', 'error');
